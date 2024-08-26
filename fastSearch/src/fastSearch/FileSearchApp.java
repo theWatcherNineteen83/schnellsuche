@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -43,6 +44,8 @@ public class FileSearchApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initComponents();
+        
+       
     }
 
     private void initComponents() {
@@ -212,6 +215,9 @@ public class FileSearchApp extends JFrame {
 
         SwingUtilities.invokeLater(() -> {
             FileSearchApp app = new FileSearchApp();
+            // Icon laden und setzen
+            ImageIcon icon = new ImageIcon(FileSearchApp.class.getResource("/resources/app-icon.png"));
+            app.setIconImage(icon.getImage());
             app.setVisible(true);
         });
     }
