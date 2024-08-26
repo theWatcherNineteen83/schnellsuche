@@ -1,4 +1,4 @@
-package fastSearch;
+package fastsearch;
 
 import java.io.BufferedReader;
 import java.io.File;
