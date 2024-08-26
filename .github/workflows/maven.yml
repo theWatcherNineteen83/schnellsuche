@@ -1,7 +1,3 @@
-name: Java CI with Maven
-
-on: [push]
-
 jobs:
   build:
 
@@ -18,4 +14,4 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      working-directory: schnellsuche # Hier das Verzeichnis anpassen, falls nötig
+      working-directory: ./ # oder "schnellsuche", je nachdem, wo die pom.xml liegt
