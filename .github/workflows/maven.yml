@@ -14,4 +14,3 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      working-directory: ./ # oder "schnellsuche", je nachdem, wo die pom.xml liegt
