@@ -1,1 +1,13 @@
 /bin/
+target/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.iml
+*.ipr
+*.iws
+/.idea/
+/.vscode/
+/out/
