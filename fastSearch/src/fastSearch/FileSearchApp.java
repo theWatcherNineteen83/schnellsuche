@@ -6,7 +6,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -44,8 +47,6 @@ public class FileSearchApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initComponents();
-        
-       
     }
 
     private void initComponents() {
@@ -71,8 +72,8 @@ public class FileSearchApp extends JFrame {
         inputPanel.add(directoryButton);
         inputPanel.add(directoryLabel);
 
-        // Tabelle für Suchergebnisse
-        tableModel = new DefaultTableModel(new Object[]{"Dateipfad", "Größe (MB)"}, 0);
+        // Tabelle für Suchergebnisse mit zusätzlichen Spalten für Erstellungsdatum und Änderungsdatum
+        tableModel = new DefaultTableModel(new Object[]{"Dateipfad", "Größe (MB)", "Erstellungsdatum", "Änderungsdatum"}, 0);
         resultTable = new JTable(tableModel);
         sorter = new TableRowSorter<>(tableModel);
         resultTable.setRowSorter(sorter);
@@ -117,7 +118,6 @@ public class FileSearchApp extends JFrame {
         getContentPane().add(inputPanel, BorderLayout.NORTH);
         getContentPane().add(tableScrollPane, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-        
 
         // Setze den Suchbutton als Default Button
         getRootPane().setDefaultButton(searchButton);
@@ -164,9 +164,17 @@ public class FileSearchApp extends JFrame {
 
     private void updateTable(List<File> foundFiles) {
         tableModel.setRowCount(0);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         for (File file : foundFiles) {
-            long fileSize = file.length();
-            tableModel.addRow(new Object[]{file.getAbsolutePath(), formatFileSize(fileSize)});
+            try {
+                BasicFileAttributes attrs = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                String creationDate = sdf.format(attrs.creationTime().toMillis());
+                String modifiedDate = sdf.format(attrs.lastModifiedTime().toMillis());
+                long fileSize = file.length();
+                tableModel.addRow(new Object[]{file.getAbsolutePath(), formatFileSize(fileSize), creationDate, modifiedDate});
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -222,3 +230,4 @@ public class FileSearchApp extends JFrame {
         });
     }
 }
+
