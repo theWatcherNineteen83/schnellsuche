@@ -9,6 +9,7 @@
 
     <build>
         <plugins>
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -16,21 +17,11 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>de.fastsearch.FileSearchApp</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
+            <!-- Jar Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -44,8 +35,9 @@
                         </manifest>
                     </archive>
                 </configuration>
-        </plugin>
+            </plugin>
         </plugins>
+        
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
