@@ -7,6 +7,10 @@ Die **FileSearchApp** ist eine Java-Anwendung zur Dateisuche mit folgenden Funkt
 - **Ergebnisse anzeigen**: Zeigt die gefundenen Dateien in einer Tabelle an, einschließlich Dateipfad und Größe. Erlaubt das Öffnen der Dateien oder das Anzeigen ihrer Position im Dateiexplorer per Rechtsklick.
 - **Benutzeroberfläche**: Ermöglicht die Eingabe von Suchkriterien, die Auswahl eines Verzeichnisses und die Ausführung der Suche durch einen Button.
 
+## Jar File erstellen
+javac -d bin src/*.java 
+jar cvfm dateisuche.jar src/manifest.txt bin/*.class
+
 ## So starten Sie das Programm
 
 ### Unter Windows
