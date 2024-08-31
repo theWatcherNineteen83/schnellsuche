@@ -1,4 +1,4 @@
-# FileSearchApp
+# FileSearchApp / 快速文件搜索  / Datei Schnellsuche
 
 ## Beschreibung
 Die **FileSearchApp** ist eine Java-Anwendung zur Dateisuche mit folgenden Funktionen:
