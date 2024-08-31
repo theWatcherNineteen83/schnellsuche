@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - featureBranch
   pull_request:
     branches:
       - main
@@ -28,4 +29,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: fastsearch-jar
-        path: target/fastsearch-1.0-SNAPSHOT.jar
+        path: target/fastsearch.jar
