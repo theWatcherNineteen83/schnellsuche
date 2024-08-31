@@ -36,4 +36,5 @@ java -jar /path/to/your/FileSearchApp.jar
 
 Lizenz
 Das Programm und die bereitgestellten Anweisungen sind frei verfügbar.
-Hinweis: Die Anweisungen und das Programm wurden von ChatGPT (OpenAI) erstellt.
+Hinweis: Die Anweisungen und das Programm wurden von 
+ChatGPT (OpenAI) und mistral-large-2407 und mir erstellt.
