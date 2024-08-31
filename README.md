@@ -10,7 +10,7 @@ Die **FileSearchApp** ist eine Java-Anwendung zur Dateisuche mit folgenden Funkt
 ## Jar File erstellen
 javac -d bin src/*.java
 
-jar cvfm dateisuche.jar src/manifest.txt bin/*.class
+jar cvfm dateisuche.jar src/MANIFEST.MF bin/*.class
 
 ## So starten Sie das Programm
 
