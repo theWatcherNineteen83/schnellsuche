@@ -110,6 +110,10 @@ public class FileSearchApp extends JFrame {
 		// Panel für die Schaltflächen und Status Label
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
+		// Status Label
+		statusLabel = new JLabel("Bereit.");
+		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0)); // 5 Pixel nach rechts einrücken
+
 		// Button-Panel für die Schaltflächen "Suchen" und "Schließen"
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 		JButton searchButton = new JButton("Suchen");
@@ -121,11 +125,9 @@ public class FileSearchApp extends JFrame {
 		buttonPanel.add(searchButton);
 		buttonPanel.add(closeButton);
 
-		// Status Label unterhalb der Buttons
-		statusLabel = new JLabel("Bereit.");
-		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-		bottomPanel.add(buttonPanel, BorderLayout.CENTER);
-		bottomPanel.add(statusLabel, BorderLayout.SOUTH);
+		// Hinzufügen der Statusleiste und der Buttons ins bottomPanel
+		bottomPanel.add(statusLabel, BorderLayout.WEST);
+		bottomPanel.add(buttonPanel, BorderLayout.EAST);
 
 		// Layout der Hauptoberfläche
 		getContentPane().setLayout(new BorderLayout());
