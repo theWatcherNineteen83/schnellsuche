@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -41,6 +42,7 @@ public class FileSearchApp extends JFrame {
 	private DefaultTableModel tableModel;
 	private JLabel directoryLabel;
 	private TableRowSorter<DefaultTableModel> sorter;
+	private JLabel statusLabel;
 
 	public FileSearchApp() {
 		setTitle("Dateisuche");
@@ -89,44 +91,47 @@ public class FileSearchApp extends JFrame {
 
 		// Mouse Listener für Doppelklick und Kontextmenü
 		resultTable.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		        if (e.getClickCount() == 2 && resultTable.getSelectedRow() != -1) { // Doppelklick und eine Zeile ist ausgewählt
-		            int row = resultTable.convertRowIndexToModel(resultTable.getSelectedRow());
-		            String filePath = tableModel.getValueAt(row, 0).toString();
-		            openFile(new File(filePath)); // Datei öffnen
-		        } else if (SwingUtilities.isRightMouseButton(e)) { // Rechtsklick
-		            int row = resultTable.rowAtPoint(e.getPoint());
-		            resultTable.setRowSelectionInterval(row, row);
-		            String filePath = tableModel.getValueAt(resultTable.convertRowIndexToModel(row), 0).toString();
-		            showContextMenu(e, new File(filePath));
-		        }
-		    }
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && resultTable.getSelectedRow() != -1) { // Doppelklick und eine Zeile ist
+																					// ausgewählt
+					int row = resultTable.convertRowIndexToModel(resultTable.getSelectedRow());
+					String filePath = tableModel.getValueAt(row, 0).toString();
+					openFile(new File(filePath)); // Datei öffnen
+				} else if (SwingUtilities.isRightMouseButton(e)) { // Rechtsklick
+					int row = resultTable.rowAtPoint(e.getPoint());
+					resultTable.setRowSelectionInterval(row, row);
+					String filePath = tableModel.getValueAt(resultTable.convertRowIndexToModel(row), 0).toString();
+					showContextMenu(e, new File(filePath));
+				}
+			}
 		});
 
+		// Panel für die Schaltflächen und Status Label
+		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		// Button-Panel für die Schaltflächen "Suchen" und "Schließen"
-		JPanel buttonPanel = new JPanel(new BorderLayout());
-
-		// Rechtsbündige Buttons in einem separaten Panel
-		JPanel rightButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 		JButton searchButton = new JButton("Suchen");
 		searchButton.addActionListener(e -> searchFiles());
 
 		JButton closeButton = new JButton("Schließen");
 		closeButton.addActionListener(e -> dispose());
 
-		rightButtonPanel.add(searchButton);
-		rightButtonPanel.add(closeButton);
+		buttonPanel.add(searchButton);
+		buttonPanel.add(closeButton);
 
-		// Hinzufügen der Such-Schaltfläche unterhalb des Ergebnisbereiches
-		buttonPanel.add(rightButtonPanel, BorderLayout.SOUTH);
+		// Status Label unterhalb der Buttons
+		statusLabel = new JLabel("Bereit.");
+		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		bottomPanel.add(buttonPanel, BorderLayout.CENTER);
+		bottomPanel.add(statusLabel, BorderLayout.SOUTH);
 
 		// Layout der Hauptoberfläche
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(inputPanel, BorderLayout.NORTH);
 		getContentPane().add(tableScrollPane, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 
 		// Setze den Suchbutton als Default Button
 		getRootPane().setDefaultButton(searchButton);
@@ -155,21 +160,33 @@ public class FileSearchApp extends JFrame {
 		boolean caseSensitive = caseSensitiveCheckBox.isSelected();
 
 		File directory = new File(directoryPath);
-		FileSearcher fileSearcher = new FileSearcher();
-		List<File> foundFiles = fileSearcher.searchByName(directory, filenamePattern);
+		FileSearcher fileSearcher = new FileSearcher(statusLabel); // StatusLabel übergeben
 
-		if (!content.isEmpty()) {
-			ContentSearcher contentSearcher = new ContentSearcher(Runtime.getRuntime().availableProcessors() * 2);
-			try {
-				foundFiles = contentSearcher.searchInFiles(foundFiles, content, caseSensitive);
-			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
-			} finally {
-				contentSearcher.shutdown();
+		// Starte die Suche in einem separaten Thread
+		new Thread(() -> {
+			List<File> foundFiles = fileSearcher.searchByName(directory, filenamePattern);
+			if (!content.isEmpty()) {
+				ContentSearcher contentSearcher = new ContentSearcher(Runtime.getRuntime().availableProcessors() * 2);
+				try {
+					foundFiles = contentSearcher.searchInFiles(foundFiles, content, caseSensitive);
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				} finally {
+					contentSearcher.shutdown();
+				}
 			}
-		}
 
-		updateTable(foundFiles);
+			// GUI-Aktualisierung in einer separaten Methode
+			updateGUI(foundFiles);
+
+		}).start();
+	}
+
+	private void updateGUI(List<File> foundFiles) {
+		SwingUtilities.invokeLater(() -> {
+			updateTable(foundFiles);
+			statusLabel.setText("Suche abgeschlossen.");
+		});
 	}
 
 	private void updateTable(List<File> foundFiles) {
