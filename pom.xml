@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.fastsearch</groupId>
 	<artifactId>fastsearch</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.1</version>
 	<build>
 		<plugins>
 			<!-- Compiler Plugin -->
@@ -32,6 +32,7 @@
 							<mainClass>fastSearch.FileSearchApp</mainClass>
 						</manifest>
 					</archive>
+					<finalName>fastsearch</finalName>
 				</configuration>
 			</plugin>
 		</plugins>
