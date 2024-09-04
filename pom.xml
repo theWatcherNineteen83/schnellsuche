@@ -26,11 +26,11 @@
 				<version>3.2.0</version>
 				<configuration>
 					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>fastSearch.FileSearchApp</mainClass>
-						</manifest>
+					<manifest>
+                				<addClasspath>true</addClasspath>
+                				<classpathPrefix>lib/</classpathPrefix>
+                				<mainClass>eu.unterlandselite.FileSearchApp</mainClass>
+            				</manifest>
 					</archive>
 					<finalName>fastsearch</finalName>
 				</configuration>
