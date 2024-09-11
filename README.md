@@ -24,10 +24,11 @@ pause
 Erstellen Sie ein Bash-Skript start_file_search.sh mit folgendem Inhalt:
 
 #!/bin/bash
-# Startet die FileSearchApp Java-Anwendung
-# Autor: ChatGPT (OpenAI)
 java -jar /path/to/your/FileSearchApp.jar
 
+
+# Startet die FileSearchApp Java-Anwendung
+# Autor: ChatGPT (OpenAI)
 
 Lizenz
 Das Programm und die bereitgestellten Anweisungen sind frei verfügbar.
