@@ -15,7 +15,6 @@ Erstellen Sie eine Batch-Datei `start_file_search.bat` mit folgendem Inhalt:
 batch
 @echo off
 REM Startet die FileSearchApp Java-Anwendung
-REM Autor: ChatGPT (OpenAI)
 java -jar path\to\your\FileSearchApp.jar
 pause
 
@@ -24,12 +23,10 @@ pause
 Erstellen Sie ein Bash-Skript start_file_search.sh mit folgendem Inhalt:
 
 #!/bin/bash
+#Startet die FileSearchApp Java-Anwendung
 java -jar /path/to/your/FileSearchApp.jar
 
-
-# Startet die FileSearchApp Java-Anwendung
 # Autor: ChatGPT (OpenAI)
-
 Lizenz
 Das Programm und die bereitgestellten Anweisungen sind frei verfügbar.
-Hinweis: Die Anweisungen und das Programm wurden von ChatGPT (OpenAI) erstellt.
+Hinweis: Die Anweisungen und das Programm wurden mit Hilfe von ChatGPT (OpenAI) erstellt.
