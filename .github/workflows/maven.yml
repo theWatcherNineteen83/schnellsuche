@@ -4,29 +4,33 @@ on:
   push:
     branches:
       - main
-      - featureBranch
+      - master
+      - 'feature/**'
   pull_request:
     branches:
       - main
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
     - name: Set up JDK 17
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
-        distribution: 'adopt'
+        distribution: 'temurin'
         cache: maven
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
     - name: Upload JAR File
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: fastsearch-jar
         path: target/fastsearch.jar

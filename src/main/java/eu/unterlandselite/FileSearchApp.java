@@ -28,13 +28,24 @@ public class FileSearchApp extends JFrame {
     private JLabel directoryLabel;
     private TableRowSorter<DefaultTableModel> sorter;
     private JLabel statusLabel;
+    private ResourceBundle messages;
 
     public FileSearchApp() {
-        setTitle("Dateisuche");
+        initMessages();
+        setTitle(messages.getString("window.title"));
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initComponents();
+    }
+
+    private void initMessages() {
+        Locale locale = Locale.getDefault();
+        try {
+            messages = ResourceBundle.getBundle("messages", locale);
+        } catch (MissingResourceException e) {
+            messages = ResourceBundle.getBundle("messages", Locale.ENGLISH);
+        }
     }
 
     public static void main(String[] args) {
@@ -46,32 +57,17 @@ public class FileSearchApp extends JFrame {
 
         SwingUtilities.invokeLater(() -> {
             FileSearchApp app = new FileSearchApp();
-            // Icon laden und setzen
             try {
                 ImageIcon icon = new ImageIcon(FileSearchApp.class.getResource("/app-icon.png"));
                 app.setIconImage(icon.getImage());
             } catch (Exception e) {
-                //throw new RuntimeException(e);
+                // Icon optional
             }
             app.setVisible(true);
         });
     }
 
-    // Beispiel für die Initialisierung von UI-Komponenten mit Text aus dem ResourceBundle
     private void initComponents() {
-        // Locale ermitteln
-        Locale locale = Locale.getDefault();
-        ResourceBundle messages;
-
-        try {
-            messages = ResourceBundle.getBundle("messages", locale);
-        } catch (MissingResourceException e) {
-            JOptionPane.showMessageDialog(this, "Language " + locale.getCountry() + " not implemented yet.");
-            messages = ResourceBundle.getBundle("messages", Locale.ENGLISH); // Fallback auf Englisch
-        }
-
-
-		setTitle(messages.getString("window.title"));
 
         // Panel für die Eingabefelder
         JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -134,7 +130,7 @@ public class FileSearchApp extends JFrame {
 
 		// Status Label
 		statusLabel = new JLabel(messages.getString("state.ready"));
-		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0)); // 5 Pixel nach rechts einrücken
+		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
 		// Button-Panel für die Schaltflächen "Suchen" und "Schließen"
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -173,8 +169,10 @@ public class FileSearchApp extends JFrame {
 
     private void searchFiles() {
         String directoryPath = directoryLabel.getText();
-        if ("Kein Ordner ausgewählt".equals(directoryPath)) {
-            JOptionPane.showMessageDialog(this, "Bitte wählen Sie einen Ordner aus.", "Fehler",
+        if (directoryPath.equals(messages.getString("noDirectory.selected"))) {
+            JOptionPane.showMessageDialog(this,
+                    messages.getString("error.noDirectory"),
+                    messages.getString("error.label"),
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -209,7 +207,7 @@ public class FileSearchApp extends JFrame {
     private void updateGUI(List<File> foundFiles) {
         SwingUtilities.invokeLater(() -> {
             updateTable(foundFiles);
-            statusLabel.setText("Suche abgeschlossen.");
+            statusLabel.setText(messages.getString("state.searchComplete"));
         });
     }
 
@@ -247,11 +245,11 @@ public class FileSearchApp extends JFrame {
     private void showContextMenu(MouseEvent e, File file) {
         JPopupMenu contextMenu = new JPopupMenu();
 
-        JMenuItem openItem = new JMenuItem("Öffnen");
+        JMenuItem openItem = new JMenuItem(messages.getString("contextMenu.open"));
         openItem.addActionListener(ae -> openFile(file));
         contextMenu.add(openItem);
 
-        JMenuItem exploreItem = new JMenuItem("Im Explorer anzeigen");
+        JMenuItem exploreItem = new JMenuItem(messages.getString("contextMenu.explore"));
         exploreItem.addActionListener(ae -> showInExplorer(file));
         contextMenu.add(exploreItem);
 
