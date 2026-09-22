@@ -1,0 +1,40 @@
+name: Release JAR
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build fat JAR
+      run: mvn -B clean package
+
+    - name: Create GitHub Release with JAR
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        VERSION=$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)
+        TAG="${GITHUB_REF_NAME}"
+        gh release create "$TAG" \
+          "target/fastsearch.jar#fastsearch-${VERSION}.jar" \
+          --title "FileSearchApp ${TAG}" \
+          --generate-notes \
+        || gh release upload "$TAG" "target/fastsearch.jar#fastsearch-${VERSION}.jar" --clobber
